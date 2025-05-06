@@ -10,14 +10,14 @@ Inspect page: allows browsing and viewing details of Llama Stack resources.
 from streamlit_option_menu import option_menu
 import streamlit as st
 
-<<<<<<< HEAD:frontend/llama_stack/distribution/ui/page/distribution/resources.py
+
 from llama_stack.distribution.ui.page.distribution.datasets import datasets
 from llama_stack.distribution.ui.page.distribution.eval_tasks import benchmarks
 from llama_stack.distribution.ui.page.distribution.models import models
 from llama_stack.distribution.ui.page.distribution.scoring_functions import scoring_functions
 from llama_stack.distribution.ui.page.distribution.shields import shields
 from llama_stack.distribution.ui.page.distribution.vector_dbs import vector_dbs
-=======
+
 from page.distribution.datasets import datasets
 from page.distribution.eval_tasks import benchmarks
 from page.distribution.models import models
@@ -25,7 +25,7 @@ from page.distribution.scoring_functions import scoring_functions
 from page.distribution.shields import shields
 from page.distribution.vector_dbs import vector_dbs
 from page.distribution.providers import providers
->>>>>>> a9126e8 (Refactored UI):frontend/llama_stack/distribution/ui/page/distribution/inspect.py
+
 
 
 def inspect_page():
