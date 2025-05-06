@@ -6,21 +6,49 @@
 import streamlit as st
 
 def main():
-    # Define available pages: path and icon
-    pages = {
-        "Chat": ("page/playground/chat.py", "💬"),
-        "Evaluations": ("page/evaluations/evaluations.py", "📊"),
-        "Inspect": ("page/distribution/inspect.py", "🔍"),
-        "Upload": ("page/playground/upload.py", "📄"),
-    }
+    # Evaluation pages
+    application_evaluation_page = st.Page(
+        "page/evaluations/app_eval.py",
+        title="Evaluations (Scoring)",
+        icon="📊",
+        default=False,
+    )
+    native_evaluation_page = st.Page(
+        "page/evaluations/native_eval.py",
+        title="Evaluations (Generation + Scoring)",
+        icon="📊",
+        default=False,
+    )
 
-    # Build navigation items dynamically
-    nav_items = [
-        st.Page(path, title=name, icon=icon, default=(name == "Chat"))
-        for name, (path, icon) in pages.items()
-    ]
-    # Render navigation
-    pg = st.navigation({"Navigation": nav_items}, expanded=False)
+    # Playground pages
+    chat_page = st.Page("page/playground/chat.py", title="Chat", icon="💬", default=True)
+    # oldchat_page = st.Page("page/playground/oldchat.py", title="oldChat", icon="💬", default=False)
+    # rag_page = st.Page("page/playground/rag.py", title="RAG", icon="💬", default=False)
+    tool_page = st.Page("page/playground/tools.py", title="Tools", icon="🛠", default=False)
+
+    # Distribution pages
+    resources_page = st.Page("page/distribution/resources.py", title="Resources", icon="🔍", default=False)
+    provider_page = st.Page(
+        "page/distribution/providers.py",
+        title="API Providers",
+        icon="🔍",
+        default=False,
+    )
+
+    pg = st.navigation(
+        {
+            "Playground": [
+                chat_page,
+                # newchat_page,
+                # rag_page,
+                tool_page,
+                application_evaluation_page,
+                native_evaluation_page,
+            ],
+            "Inspect": [provider_page, resources_page],
+        },
+        expanded=False,
+    )
     pg.run()
 
 
