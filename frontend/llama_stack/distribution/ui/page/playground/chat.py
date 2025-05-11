@@ -108,6 +108,14 @@ def tool_chat_page():
     # --- Sidebar Configuration ---
     with st.sidebar:
         st.title("Configuration")
+        st.subheader("Model")
+        model = st.selectbox(
+            label="Model",
+            options=model_list,
+            on_change=reset_agent_and_chat,
+            label_visibility="collapsed",
+            index=0 if model_list else -1
+        )
 
         processing_mode = st.radio(
             "Processing mode",
@@ -132,15 +140,6 @@ def tool_chat_page():
         else:
             agent_type = None # Not applicable for Direct mode
 
-        st.subheader("Model")
-        model = st.selectbox(
-            label="Model",
-            options=model_list,
-            on_change=reset_agent_and_chat,
-            label_visibility="collapsed",
-            index=0 if model_list else -1
-        )
-
         # Tool selection for Agent-based mode
         selected_builtin_tools = []
         if processing_mode == "Agent-based":
@@ -157,19 +156,17 @@ def tool_chat_page():
         rag_enabled_in_agent = processing_mode == "Agent-based" and "builtin::rag" in selected_builtin_tools
         if processing_mode == "Direct" or rag_enabled_in_agent:
             vector_dbs_available = llama_stack_api.client.vector_dbs.list() or []
+            vector_db_options = []
             if vector_dbs_available:
                  vector_db_options = [vector_db.identifier for vector_db in vector_dbs_available if hasattr(vector_db, 'identifier')]
-                 if vector_db_options:
-                     selected_vector_dbs = st.multiselect(
-                         label="Select Vector Databases (for RAG)",
-                         options=vector_db_options,
-                         on_change=reset_agent_and_chat,
-                         help="Choose collections for RAG retrieval."
-                     )
-                 else:
-                      st.caption("No vector databases found.")
-            else:
-                 st.caption("No vector databases available.")
+
+            selected_vector_dbs = st.multiselect(
+                label="Select Vector Databases (for RAG)",
+                options=vector_db_options,
+                on_change=reset_agent_and_chat,
+                help="Choose collections for RAG retrieval."
+                )
+            
 
         selected_mcp_tools = []
         # if processing_mode == "Agent-based":
@@ -217,12 +214,12 @@ def tool_chat_page():
 
         input_shields = []
         output_shields = []
-        if processing_mode == "Agent-based":
-            st.subheader("Security Shields")
-            shields_available = client.shields.list()
-            shield_options = [s.identifier for s in shields_available if hasattr(s, 'identifier')]
-            input_shields = st.multiselect("Input Shields", options=shield_options, on_change=reset_agent_and_chat)
-            output_shields = st.multiselect("Output Shields", options=shield_options, on_change=reset_agent_and_chat)
+
+        st.subheader("Security Shields")
+        shields_available = client.shields.list()
+        shield_options = [s.identifier for s in shields_available if hasattr(s, 'identifier')]
+        input_shields = st.multiselect("Input Shields", options=shield_options, on_change=reset_agent_and_chat)
+        output_shields = st.multiselect("Output Shields", options=shield_options, on_change=reset_agent_and_chat)
 
         st.subheader("Sampling Parameters")
         temperature = st.slider("Temperature", 0.0, 2.0, 0.1, 0.05, on_change=reset_agent_and_chat)
